@@ -3,7 +3,7 @@
 
 - name: reformat dict if necessary
   set_fact:
-    restic_backups: "{{ restic_backups|dict2items|json_query('[*].value') }}"
+    restic_backups_loop: "{{ restic_backups|dict2items|json_query('[*].value') }}"
   when:
     - restic_backups | type_debug == "dict"
 
@@ -15,7 +15,7 @@
     owner: '{{ restic_dir_owner }}'
     group: '{{ restic_dir_group }}'
   no_log: true
-  with_items: '{{ restic_backups }}'
+  with_items: '{{ restic_backups_loop }}'
   when:
     - item.name is defined
     - item.src is defined or item.stdin is defined
@@ -30,7 +30,7 @@
     owner: '{{ restic_dir_owner }}'
     group: '{{ restic_dir_group }}'
   no_log: true
-  with_items: '{{ restic_backups }}'
+  with_items: '{{ restic_backups_loop }}'
   when:
     - item.name is defined
     - item.src is defined or item.stdin is defined
@@ -48,7 +48,7 @@
     state: present
   become: true
   no_log: true
-  with_items: '{{ restic_backups }}'
+  with_items: '{{ restic_backups_loop }}'
   when:
     - restic_create_cron
     - item.name is defined
