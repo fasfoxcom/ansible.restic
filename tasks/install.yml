@@ -1,4 +1,9 @@
 ---
+- name: Install rclone
+  ansible.builtin.apt:
+    name: rclone
+    state: present
+
 - name: Download client binary
   get_url:
     url: '{{ restic_url }}'
